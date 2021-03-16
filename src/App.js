@@ -16,8 +16,8 @@ export default function App() {
   return (
     <div className={classes.root}>
       <Header />
-      <Container maxWidth="xl">
-        <Carousel />
+      <Carousel />
+      <Container maxWidth="lg">
         <Content />
       </Container>
     </div>

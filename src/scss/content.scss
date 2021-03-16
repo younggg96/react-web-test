@@ -1,22 +1,37 @@
+$main: #ee4420;
+$light: #f6f6f6;
+
 .bg-clip {
-    background-color: #ee4420;
-    clip-path: polygon(0 0, 90% 0, 50% 100%, 0% 100%);
+    background-color: $main;
+    clip-path: polygon(0 0, 95% 0, 55% 100%, 0% 100%);
+    border-radius: 16px 0px 0px 16px;
 }
 
 .live-view {
     padding: 0 48px;
     width: 200px;
     position: absolute;
-    bottom: -25%;
+    bottom: 5%;
     div {
-        color: #f6f6f6;
+        color: $light;
         font-weight: bolder;
     }
 }
 
 .prod {
-    left: 20%;
+    left: -70%;
     position: absolute;
-    bottom: -25%;
-    width: 450px;
+    bottom: 0;
+}
+
+.done-svg {
+    color: $light;
+    padding: 4px;
+    font-size: 12px !important;
+    border: 1px solid $light;
+    border-radius: 50%;
+}
+
+.now-step {
+    background-color: $main !important;
 }

@@ -27,13 +27,14 @@ const getRandomIcons = () => {
 const useStyles = makeStyles((theme) => ({
   title: {
     color: theme.palette.secondary.light,
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(0, 1),
   },
   icon: {
     margin: "auto",
     padding: theme.spacing(2),
-    width: 40,
-    height: 40,
+    width: 20,
+    height: 20,
     borderRadius: "50%",
     display: "flex",
     justifyContent: "center",
@@ -50,34 +51,32 @@ const ChooseOptions = () => {
     setIconArr(getRandomIcons());
   }, []);
   return (
-    <div>
-      <Grid container direction="column">
-        <Grid item>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            align="center"
-            className={classes.title}
-          >
-            CHOOSEN
+    <Grid container direction="column">
+      <Grid item>
+        <Typography
+          variant="subtitle2"
+          component="div"
+          align="center"
+          className={classes.title}
+        >
+          CHOOSEN
             <Box fontWeight="bolder">OPTIONS:</Box>
-          </Typography>
-        </Grid>
-        <Grid item>
-          <List>
-            {iconArr.map((item, index) => {
-              return (
-                <ListItem key={index} style={{ marginBottom: 8}}>
-                  <div className={classes.icon}>
-                    <img src={item} alt="" width="26px" />
-                  </div>
-                </ListItem>
-              );
-            })}
-          </List>
-        </Grid>
+        </Typography>
       </Grid>
-    </div>
+      <Grid item>
+        <List>
+          {iconArr.map((item, index) => {
+            return (
+              <ListItem key={index} style={{ marginBottom: 8 }}>
+                <div className={classes.icon}>
+                  <img src={item} alt="" width="18px" />
+                </div>
+              </ListItem>
+            );
+          })}
+        </List>
+      </Grid>
+    </Grid>
   );
 };
 

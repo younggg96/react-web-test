@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    boxShadow: "5px 4px 20px 0px #02020245",
+    boxShadow: "4px 2px 10px 0px #02020245",
     cursor: "pointer",
   },
   iconTitle: {
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
   icons: {
     marginTop: theme.spacing(4),
-    padding: "0 6%",
+    padding: "0 10%",
   },
 }));
 
