@@ -1,0 +1,22 @@
+.bg-clip {
+    background-color: #ee4420;
+    clip-path: polygon(0 0, 90% 0, 50% 100%, 0% 100%);
+}
+
+.live-view {
+    padding: 0 48px;
+    width: 200px;
+    position: absolute;
+    bottom: -25%;
+    div {
+        color: #f6f6f6;
+        font-weight: bolder;
+    }
+}
+
+.prod {
+    left: 20%;
+    position: absolute;
+    bottom: -25%;
+    width: 450px;
+}

@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { Container, makeStyles } from "@material-ui/core";
+import React from "react";
+import Header from "./components/header";
+import Carousel from './components/carousel';
+import Content from "./components/content/content";
 
-function App() {
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.secondary.light
+  }
+}))
+export default function App() {
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.root}>
+      <Header />
+      <Container maxWidth="xl">
+        <Carousel />
+        <Content />
+      </Container>
     </div>
   );
 }
-
-export default App;

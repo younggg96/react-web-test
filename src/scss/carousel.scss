@@ -1,0 +1,35 @@
+$main: #ee4420;
+
+.slider {
+  display: flex;
+  max-width: 800px;
+}
+
+.slick-slider .slick-list {
+  padding: 20px 0;
+}
+
+.slick-prev::before,
+.slick-next::before {
+  font-size: 50px !important;
+  color: black !important;
+  line-height: 100px !important;
+}
+
+.actived {
+  background-color: $main;
+}
+
+.text-actived p{
+  color: rgba(73, 73, 73, 0.5);
+}
+
+.add-custom,
+.add-icon {
+  border: #ee4420 2px solid;
+}
+
+.add-icon {
+  padding: 8px;
+  border-radius: 50%;
+}
