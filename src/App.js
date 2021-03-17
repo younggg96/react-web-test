@@ -3,6 +3,7 @@ import React from "react";
 import Header from "./components/header";
 import Carousel from './components/carousel';
 import Content from "./components/content/content";
+import Footer from "./components/footer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,6 +21,7 @@ export default function App() {
       <Container maxWidth="lg">
         <Content />
       </Container>
+      <Footer />
     </div>
   );
 }

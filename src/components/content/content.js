@@ -1,12 +1,24 @@
-import React, { useState } from "react";
-import { Box, Button, Divider, Grid, makeStyles, Slider, Typography } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Divider, Grid, GridList, GridListTile, makeStyles, Slider, Typography } from "@material-ui/core";
 import ChooseOptions from "./chooseOptions";
 // icon
 import DoneIcon from '@material-ui/icons/Done';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 // img
 import prod from "../../assets/imgs/product.png";
 //scss
 import "../../scss/content.scss";
+// brands
+import logoLight1 from '../../assets/imgs/brands/logo1-light.png';
+import logoLight2 from '../../assets/imgs/brands/logo2-light.png';
+import logoLight3 from '../../assets/imgs/brands/logo3-light.png';
+import logoLight4 from '../../assets/imgs/brands/logo4-light.png';
+import logoDark1 from '../../assets/imgs/brands/logo1-dark.png';
+import logoDark2 from '../../assets/imgs/brands/logo2-dark.png';
+import logoDark3 from '../../assets/imgs/brands/logo3-dark.png';
+import logoDark4 from '../../assets/imgs/brands/logo4-dark.png';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,10 +56,13 @@ const useStyles = makeStyles((theme) => ({
     width: 400,
   },
   doneIcon: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     margin: theme.spacing(1, 1.5),
     backgroundColor: theme.palette.primary.dark,
     borderRadius: "50%",
-    padding: theme.spacing(1),
+    padding: 10,
   },
   steps: {
     padding: theme.spacing(4, 2),
@@ -62,8 +77,56 @@ const useStyles = makeStyles((theme) => ({
   slider: {
     marginTop: theme.spacing(2)
   },
+  gridList: {
+    padding: theme.spacing(1, 4, 1, 0),
+  },
   chooseTab: {
     marginTop: theme.spacing(4)
+  },
+  chooseItem: {
+    height: "100px !important",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  brandIcon: {
+    width: 120,
+    height: 80,
+    backgroundColor: "#fafafa",
+    borderRadius: 12,
+    cursor: "pointer",
+    backgroundPosition: "center center", 
+    backgroundRepeat: "no-repeat"
+  },
+  next: {
+    padding: theme.spacing(5),
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  nextButton: {
+    padding: "12px 40px",
+    fontSize: 16,
+    fontWeight: "600",
+    borderRadius: 25,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main
+    }
+  },
+  tabs: {
+    position: "absolute",
+    left: "100%",
+    top: "calc(50% - 65px)",
+  },
+  tab: {
+    width: 80,
+    height: 60,
+    borderRadius: "0 12px 12px 0",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "10px 0",
+    cursor: "pointer"
   }
 }));
 
@@ -107,24 +170,69 @@ const SliderBar = () => {
   )
 }
 
-const TabItem = () => {
+const BRANDS_ARR = [
+  {id: '1',light: logoLight1, dark: logoDark1},
+  {id: '2',light: logoLight2, dark: logoDark2},
+  {id: '3',light: logoLight3, dark: logoDark3},
+  {id: '4',light: logoLight4, dark: logoDark4},
+];
+
+const ChooseItem = (props) => {
   const classes = useStyles();
+  const [active, setActive] = useState(false);
+  const {dark, light} = props.ele;
+  
+  const clickHandler = () => {
+    setActive(!active);
+  };
+
   return (
-    <div></div>
+    <React.Fragment>
+      <div className={classes.brandIcon} onClick={clickHandler} style={ !active? {backgroundImage: `url(${dark})`} : {backgroundImage: `url(${light})`, backgroundColor: "#ee4420", position: "relative"}}>
+        { !active ? null : <DoneIcon className="done-svg done-active" /> }
+      </div>
+    </React.Fragment>
   )
 }
 
 const ChooseTab = () => {
   const classes = useStyles();
+  const [tileData, setTileData] = useState([]);
+
+  useEffect(() => {
+    setTileData(getRandomDate());
+  }, []);
+
+  const getRandomDate = () => {
+    const date = [];
+    for (let i = 0; i < 8; i++) {
+      date.push(BRANDS_ARR[Math.floor(Math.random() * 4)]);
+    }
+    console.log(date);
+    return date;
+  }
+
   return (
     <React.Fragment>
-      <Grid></Grid>
+      <GridList cellHeight={160} className={classes.gridList} cols={4}>
+        {tileData.map((ele, index )=> (
+          <GridListTile key={index} className={classes.chooseItem}>
+            <ChooseItem ele={ele}/>
+          </GridListTile>
+        ))}
+      </GridList>
     </React.Fragment>
   )
 }
 
 const Content = () => {
   const classes = useStyles();
+  const [active, setActive] = useState(false);
+    
+  const clickHandler = () => {
+    setActive(!active);
+  };
+
   return (
     <React.Fragment>
       <Grid container className={classes.root}>
@@ -191,7 +299,7 @@ const Content = () => {
               })}
             </Grid>
             <Grid item>
-              <Typography variant="subtitle1" style={{ padding: "8px 16px", fontWeight: "bolder", color: "#00000080" }}>Complete 3 steps of 4</Typography>
+              <Typography variant="subtitle1" style={{ padding: "8px 16px", fontWeight: "bolder", color: "#00000050" }}>Complete 3 steps of 4</Typography>
             </Grid>
           </Grid>
           <Grid item container direction="column">
@@ -201,13 +309,24 @@ const Content = () => {
             </Typography>
           </Grid>
           <Grid item className={classes.slider}><SliderBar /></Grid>
-          <Divider />
-          <Grid item className={classes.chooseTab}>
-            <Grid item xs>
+          <Divider style={{width: "95%"}}/>
+          <Grid item container direction="column" className={classes.chooseTab}>
+            <Grid item>
               <Typography variant="h6" component="span">CHOOSE <Box component="span" color="primary.main">TYPE OF CONNECTION</Box></Typography>
               <ChooseTab />
             </Grid>
+            <Grid item className={classes.next}>
+              <Button variant="contained" color="primary" className={classes.nextButton}>NEXT STEP</Button>
+            </Grid>
           </Grid>
+          <div className={classes.tabs}>
+            <div className={classes.tab} onClick={clickHandler} style={active ? {backgroundColor: "#ee4420"} : {backgroundColor: "#00000030"}}>
+              <KeyboardArrowRightIcon className="arrow-icon"/>
+            </div>
+            <div className={classes.tab} onClick={clickHandler} style={active ? {backgroundColor: "#00000030"} : {backgroundColor: "#ee4420"}}>
+              <KeyboardArrowLeftIcon className="arrow-icon"/>
+            </div>
+          </div>
           <img className="prod" src={prod} alt="prod" />
         </Grid>
       </Grid>

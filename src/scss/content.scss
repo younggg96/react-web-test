@@ -32,6 +32,23 @@ $light: #f6f6f6;
     border-radius: 50%;
 }
 
+.done-active {
+    position: absolute;
+    top: 5%;
+    left: 75%;
+}
+
 .now-step {
     background-color: $main !important;
+}
+
+.arrow-icon {
+    border: 1px solid $light;
+    padding: 2px;
+    border-radius: 50%;
+    color: $light;
+}
+
+.MuiGridListTile-tile {
+    height: unset !important;
 }
