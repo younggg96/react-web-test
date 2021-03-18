@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Divider, Grid, GridList, GridListTile, makeStyles, Slider, Typography } from "@material-ui/core";
+import { Box, Button, Divider, Grid, GridList, GridListTile, makeStyles, Modal, Slider, Typography } from "@material-ui/core";
 import ChooseOptions from "./chooseOptions";
 // icon
 import DoneIcon from '@material-ui/icons/Done';
@@ -19,6 +19,7 @@ import logoDark2 from '../../assets/imgs/brands/logo2-dark.png';
 import logoDark3 from '../../assets/imgs/brands/logo3-dark.png';
 import logoDark4 from '../../assets/imgs/brands/logo4-dark.png';
 import { useSelector } from "react-redux";
+import { FormProvider, useForm } from "react-hook-form";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -128,7 +129,25 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     margin: "10px 0",
     cursor: "pointer"
-  }
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: "#fff",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    outline: "none",
+    borderRadius: theme.shape.borderRadius,
+    width: "20%",
+  },
+  formControl: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
 
 const SliderBar = () => {
@@ -229,16 +248,35 @@ const ChooseTab = () => {
 const Content = () => {
   const classes = useStyles();
   const [active, setActive] = useState(false);
+  const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
-  const list = useSelector(state => state.optionReducer);
+  const list = useSelector(state => state.optionReducer.list);
     
   const clickHandler = () => {
     setActive(!active);
   };
+
+  // modal form
+  const methods = useForm();
+  const { handleSubmit } = methods;
+  const onSubmit = (data) => {
+    console.log(data)
+    // dispatch(addCustomIcon(data));
+    handleClose();
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
   useEffect(() => {
     console.log(list)
     console.log(show)
-    if(list.list.length >= 4) {
+    if(list.length >= 4) {
       setShow(true);
     }
   }, [list]);
@@ -261,10 +299,43 @@ const Content = () => {
                 </Typography>
               </Grid>
               <Grid item xs>
-                <Button variant="outlined" className={classes.orderButton}>
+                <Button variant="outlined" className={classes.orderButton} onClick={handleOpen}>
                   ORDER NOW
                 </Button>
               </Grid>
+              <Modal className={classes.modal} open={open} onClose={handleClose}>
+                <div className={classes.paper}>
+                  <FormProvider {...methods}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <Grid container direction="column">
+                        <Grid item xs>
+                          <h3 className={classes.iconTitle}>
+                            Product Title
+                          </h3>
+                        </Grid>
+                        <Grid item xs>
+                          {/* <FormSelect
+                            name="iconType"
+                            label="IconTypes"
+                            options={iconsData}
+                          /> */}
+                        </Grid>
+                        <Grid item xs>
+                          <Button
+                            variant="contained"
+                            fullWidth
+                            color="primary"
+                            onClick={handleSubmit(onSubmit)}
+                            style={{ marginTop: 16 }}
+                          >
+                            Add to cart
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </form>
+                  </FormProvider>
+                </div>
+              </Modal>
             </Grid>
             <Grid item className={classes.content}>
               <Typography

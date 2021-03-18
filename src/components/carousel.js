@@ -1,58 +1,24 @@
 import React, { useEffect, useState } from "react";
+
+//scss
 import "../scss/carousel.scss";
 import "../../node_modules/slick-carousel/slick/slick.css";
 import "../../node_modules/slick-carousel/slick/slick-theme.css";
-import {
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-  Typography,
-} from "@material-ui/core";
+
+import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import Slider from "react-slick";
 
-// icons
-import shape1 from "../assets/imgs/icons/Shape-1.png";
-import shapeDark1 from "../assets/imgs/icons/Shape-1-dark.png";
-import shape2 from "../assets/imgs/icons/Shape-2.png";
-import shapeDark2 from "../assets/imgs/icons/Shape-2-dark.png";
-import shape3 from "../assets/imgs/icons/Shape-3.png";
-import shapeDark3 from "../assets/imgs/icons/Shape-3-dark.png";
-
 import AddIcon from "@material-ui/icons/Add";
-import {
-  Controller,
-  FormProvider,
-  useForm,
-  useFormContext,
-} from "react-hook-form";
+
+// form
+import FormSelect from "./form/formSelect";
+import { FormProvider, useForm } from "react-hook-form";
+
+// redux
 import { useDispatch, useSelector } from "react-redux";
 import { addCustomIcon } from "../redux/actions/iconActions";
 
-const ICON_MAP = {
-  tempIcon: {
-    img: shape1,
-    dark: shapeDark1,
-    alt: "Temperature",
-  },
-  cloudIcon: {
-    img: shape2,
-    dark: shapeDark2,
-    alt: "Dust Temperature",
-  },
-  cloudTempIcon: {
-    img: shape3,
-    dark: shapeDark3,
-    alt: "Cloud Temperature",
-  },
-  addIcon: {
-    alt: "Add custom",
-  },
-};
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -101,40 +67,6 @@ const iconsData = [
   { value: "Dust Temperature", label: "Dust Temperature Icon" },
   { value: "Cloud Temperature", label: "Cloud Temperature Icon" },
 ];
-
-const MuiSelect = (props) => {
-  const { label, name, options } = props;
-
-  return (
-    <FormControl fullWidth={true}>
-      <InputLabel htmlFor={name}>{label}</InputLabel>
-      <Select id={name} {...props}>
-        {options.map((item, index) => (
-          <MenuItem key={index} value={item.value}>
-            {item.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-};
-
-const FormSelect = (props) => {
-  const { control } = useFormContext();
-  const { name, label } = props;
-  return (
-    <React.Fragment>
-      <Controller
-        as={MuiSelect}
-        control={control}
-        name={name}
-        label={label}
-        defaultValue=""
-        {...props}
-      />
-    </React.Fragment>
-  );
-};
 
 const AddCustomIcon = (props) => {
   const classes = useStyles();
@@ -186,20 +118,10 @@ const AddCustomIcon = (props) => {
                   </h3>
                 </Grid>
                 <Grid item xs>
-                  <FormSelect
-                    name="iconType"
-                    label="IconTypes"
-                    options={iconsData}
-                  />
+                  <FormSelect name="iconType" label="IconTypes"  options={iconsData} />
                 </Grid>
                 <Grid item xs>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    color="primary"
-                    onClick={handleSubmit(onSubmit)}
-                    style={{ marginTop: 16 }}
-                  >
+                  <Button variant="contained" fullWidth color="primary" onClick={handleSubmit(onSubmit)} style={{ marginTop: 16 }}>
                     SUBMIT
                   </Button>
                 </Grid>
@@ -287,11 +209,15 @@ function PrevArrow(props) {
 
 const Carousel = () => {
   const classes = useStyles();
-  const [iconArr, setIconArr] = useState([ICON_MAP.addIcon]);
+  const [iconArr, setIconArr] = useState([
+    {
+      alt: "Add custom",
+    },
+  ]);
   const icon = useSelector((state) => state.iconReducer.arr);
 
   useEffect(() => {
-    setIconArr(icon)
+    setIconArr(icon);
   }, [icon]);
   const settings = {
     infinite: false,
@@ -340,7 +266,7 @@ const Carousel = () => {
       <Slider {...settings}>
         {iconArr.map((ele) => {
           if (ele.alt === "Add custom")
-            return <AddCustomIcon alt={ele.alt} key={ele.alt}/>;
+            return <AddCustomIcon alt={ele.alt} key={ele.alt} />;
           return (
             <IconListButtons
               img={ele.img}
