@@ -145,6 +145,7 @@ const AddCustomIcon = (props) => {
 
   const onSubmit = (data) => {
     dispatch(addCustomIcon(data));
+    handleClose();
   };
 
   const handleOpen = () => {
@@ -284,33 +285,13 @@ function PrevArrow(props) {
   );
 }
 
-let iconList = [];
-
 const Carousel = () => {
   const classes = useStyles();
-  const [iconArr, setIconArr] = useState([]);
-  const icon = useSelector((state) => state.iconType);
-  const getRandomIcons = () => {
-    const arr = [ICON_MAP.tempIcon, ICON_MAP.cloudIcon, ICON_MAP.tempIcon];
-    for (let i = 0; i < 10; i++) {
-      iconList.push(arr[Math.floor(Math.random() * 3)]);
-    }
-    console.log(icon)
-    if (icon) {
-      arr.forEach((ele) => {
-        if(ele.alt === icon) {
-          iconList.push(ele);
-        }
-      });
-    }
-    iconList.push(ICON_MAP.addIcon);
-    console.log(iconList);
-    return iconList;
-  };
+  const [iconArr, setIconArr] = useState([ICON_MAP.addIcon]);
+  const icon = useSelector((state) => state.iconReducer.arr);
 
   useEffect(() => {
-    console.log(icon)
-    setIconArr(getRandomIcons());
+    setIconArr(icon)
   }, [icon]);
   const settings = {
     infinite: false,
@@ -357,9 +338,9 @@ const Carousel = () => {
   return (
     <div className={classes.icons}>
       <Slider {...settings}>
-        {iconArr.map((ele) => {
+        {iconArr.reverse().map((ele) => {
           if (ele.alt === "Add custom")
-            return <AddCustomIcon alt={ele.alt} key={ele.alt} />;
+            return <AddCustomIcon alt={ele.alt} key={ele.alt}/>;
           return (
             <IconListButtons
               img={ele.img}
