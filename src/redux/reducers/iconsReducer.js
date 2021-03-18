@@ -1,3 +1,4 @@
+
 const initialState = {
   arr: [
     {
@@ -10,7 +11,7 @@ export default function iconReducer(state = initialState, action) {
   //   console.log(action)
   switch (action.type) {
     case "add_custom":
-      return { ...state, arr: [...state.arr, action.payload] };
+      return { ...state, arr: [action.payload, ...state.arr ] };
     default:
       return state;
   }

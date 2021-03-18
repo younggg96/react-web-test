@@ -338,7 +338,7 @@ const Carousel = () => {
   return (
     <div className={classes.icons}>
       <Slider {...settings}>
-        {iconArr.reverse().map((ele) => {
+        {iconArr.map((ele) => {
           if (ele.alt === "Add custom")
             return <AddCustomIcon alt={ele.alt} key={ele.alt}/>;
           return (
