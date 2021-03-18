@@ -134,7 +134,7 @@ const SliderBar = () => {
   const classes = useStyles();
   const [currentDistance, setCurrentDistance] = useState(22);
   const handleSliderChange = (event, newValue) => {
-    console.log(event.target.value)
+    console.log(event.target)
     setCurrentDistance(newValue);
   };
 
@@ -159,6 +159,7 @@ const SliderBar = () => {
           <Slider
             value={currentDistance}
             onChange={handleSliderChange}
+            max="50"
           />
         </Grid>
         <Grid item container justify="space-between" alignItems="center">
