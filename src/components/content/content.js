@@ -242,7 +242,7 @@ const Content = () => {
           </Grid>
           <Grid item container xs direction="column" style={{ position: "relative" }}>
             <Grid item container className={classes.order}>
-              <Grid item xs="5">
+              <Grid item xs={5}>
                 <Typography variant="h6" className={classes.orderTitle}>
                   <Box fontWeight="bolder">
                     WHITE LABEL
@@ -259,7 +259,7 @@ const Content = () => {
             <Grid item className={classes.content}>
               <Typography
                 variant="body1"
-                component="p"
+                component="span"
                 style={{ marginBottom: 16 }}
               >
                 <Box fontWeight="700">
@@ -268,7 +268,7 @@ const Content = () => {
                   taciti sociosqu ad litora torquent per conubia nostra, per i
                 </Box>
               </Typography>
-              <Typography variant="body2" component="p">
+              <Typography variant="body2" component="span">
                 <Box fontWeight="400">
                   nceptos himenaeos. Mauris in erat justo. Nullam ac urna eu
                   felis dapibus condimentum sit amet a augue. Sed non neque
@@ -288,7 +288,7 @@ const Content = () => {
         </Grid>
         <Grid item container xs={6} direction="column" style={{ position: "relative" }}>
           <Grid item container direction="column" className={classes.steps}>
-            <Grid item direction="row" style={{ display: "flex" }}>
+            <Grid item container direction="row" style={{ display: "flex", justifyContent: "flex-end" }}>
               {[0, 1, 2, 3].map(ele => {
                 if (ele === 2) return (<div key={ele} className={`${classes.doneIcon} now-step`}>
                   <DoneIcon className="done-svg now-step" />

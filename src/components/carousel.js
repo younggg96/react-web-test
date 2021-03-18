@@ -2,7 +2,17 @@ import React, { useEffect, useState } from "react";
 import "../scss/carousel.scss";
 import "../../node_modules/slick-carousel/slick/slick.css";
 import "../../node_modules/slick-carousel/slick/slick-theme.css";
-import { Grid, makeStyles, Typography } from "@material-ui/core";
+import {
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Select,
+  Typography,
+} from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
 import Slider from "react-slick";
 
 // icons
@@ -14,6 +24,14 @@ import shape3 from "../assets/imgs/icons/Shape-3.png";
 import shapeDark3 from "../assets/imgs/icons/Shape-3-dark.png";
 
 import AddIcon from "@material-ui/icons/Add";
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { addCustomIcon } from "../redux/actions/iconActions";
 
 const ICON_MAP = {
   tempIcon: {
@@ -24,33 +42,16 @@ const ICON_MAP = {
   cloudIcon: {
     img: shape2,
     dark: shapeDark2,
-    alt: "Dust temperature",
+    alt: "Dust Temperature",
   },
   cloudTempIcon: {
     img: shape3,
     dark: shapeDark3,
-    alt: "Cloud temperature",
+    alt: "Cloud Temperature",
   },
   addIcon: {
     alt: "Add custom",
   },
-};
-
-let iconList = [];
-
-const getRandomIcons = () => {
-  const arr = [
-    ICON_MAP.tempIcon,
-    ICON_MAP.cloudIcon,
-    ICON_MAP.tempIcon,
-    ICON_MAP.addIcon,
-  ];
-  for (let i = 0; i < 10; i++) {
-    iconList.push(arr[Math.floor(Math.random() * 3)]);
-  }
-  iconList.push(arr[3]);
-  console.log(iconList);
-  return iconList;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -74,23 +75,138 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
     padding: "0 10%",
   },
+  // modal
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: "#fff",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    outline: "none",
+    borderRadius: theme.shape.borderRadius,
+    width: "20%",
+  },
+  formControl: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
+
+const iconsData = [
+  { value: "Temperature", label: "TempIcon Icon" },
+  { value: "Dust Temperature", label: "Dust Temperature Icon" },
+  { value: "Cloud Temperature", label: "Cloud Temperature Icon" },
+];
+
+const MuiSelect = (props) => {
+  const { label, name, options } = props;
+
+  return (
+    <FormControl fullWidth={true}>
+      <InputLabel htmlFor={name}>{label}</InputLabel>
+      <Select id={name} {...props}>
+        {options.map((item, index) => (
+          <MenuItem key={index} value={item.value}>
+            {item.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+};
+
+const FormSelect = (props) => {
+  const { control } = useFormContext();
+  const { name, label } = props;
+  return (
+    <React.Fragment>
+      <Controller
+        as={MuiSelect}
+        control={control}
+        name={name}
+        label={label}
+        defaultValue=""
+        {...props}
+      />
+    </React.Fragment>
+  );
+};
 
 const AddCustomIcon = (props) => {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const methods = useForm();
+  const { handleSubmit } = methods;
+  const dispatch = useDispatch();
+
+  const onSubmit = (data) => {
+    dispatch(addCustomIcon(data));
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const { alt } = props;
+
   return (
     <div>
       <Grid container direction="column">
-        <Grid item className={`${classes.icon} add-custom`}>
-          <AddIcon color="primary" className="add-icon"/>
+        <Grid
+          item
+          className={`${classes.icon} add-custom`}
+          onClick={handleOpen}
+        >
+          <AddIcon color="primary" className="add-icon" />
         </Grid>
+
         <Grid item className={classes.iconTitle}>
           <Typography variant="body1" align="center">
             {alt}
           </Typography>
         </Grid>
       </Grid>
+      <Modal className={classes.modal} open={open} onClose={handleClose}>
+        <div className={classes.paper}>
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid container direction="column">
+                <Grid item xs>
+                  <h3 className={classes.iconTitle} align="center">
+                    Add Custom Icon
+                  </h3>
+                </Grid>
+                <Grid item xs>
+                  <FormSelect
+                    name="iconType"
+                    label="IconTypes"
+                    options={iconsData}
+                  />
+                </Grid>
+                <Grid item xs>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    color="primary"
+                    onClick={handleSubmit(onSubmit)}
+                    style={{ marginTop: 16 }}
+                  >
+                    SUBMIT
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </FormProvider>
+        </div>
+      </Modal>
     </div>
   );
 };
@@ -117,7 +233,12 @@ const IconListButtons = (props) => {
             <img src={img} alt={alt} width="26px" />
           )}
         </Grid>
-        <Grid item className={active ? classes.iconTitle : `${classes.iconTitle} text-actived`}>
+        <Grid
+          item
+          className={
+            active ? classes.iconTitle : `${classes.iconTitle} text-actived`
+          }
+        >
           <Typography variant="body1" align="center">
             {alt}
           </Typography>
@@ -163,12 +284,34 @@ function PrevArrow(props) {
   );
 }
 
+let iconList = [];
+
 const Carousel = () => {
   const classes = useStyles();
   const [iconArr, setIconArr] = useState([]);
+  const icon = useSelector((state) => state.iconType);
+  const getRandomIcons = () => {
+    const arr = [ICON_MAP.tempIcon, ICON_MAP.cloudIcon, ICON_MAP.tempIcon];
+    for (let i = 0; i < 10; i++) {
+      iconList.push(arr[Math.floor(Math.random() * 3)]);
+    }
+    console.log(icon)
+    if (icon) {
+      arr.forEach((ele) => {
+        if(ele.alt === icon) {
+          iconList.push(ele);
+        }
+      });
+    }
+    iconList.push(ICON_MAP.addIcon);
+    console.log(iconList);
+    return iconList;
+  };
+
   useEffect(() => {
-    setIconArr(getRandomIcons())
-  }, []);
+    console.log(icon)
+    setIconArr(getRandomIcons());
+  }, [icon]);
   const settings = {
     infinite: false,
     slidesToShow: 11,

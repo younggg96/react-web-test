@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     height: 120,
     padding: theme.spacing(4),
     position: "absolute",
-    left: "65%",
-    top: "-30%",
+    right: "100px",
+    top: "-100px",
   },
   title: {
     marginBottom: theme.spacing(1),
