@@ -18,6 +18,7 @@ import logoDark1 from '../../assets/imgs/brands/logo1-dark.png';
 import logoDark2 from '../../assets/imgs/brands/logo2-dark.png';
 import logoDark3 from '../../assets/imgs/brands/logo3-dark.png';
 import logoDark4 from '../../assets/imgs/brands/logo4-dark.png';
+import { useSelector } from "react-redux";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -134,7 +135,6 @@ const SliderBar = () => {
   const classes = useStyles();
   const [currentDistance, setCurrentDistance] = useState(22);
   const handleSliderChange = (event, newValue) => {
-    console.log(event.target)
     setCurrentDistance(newValue);
   };
 
@@ -229,10 +229,19 @@ const ChooseTab = () => {
 const Content = () => {
   const classes = useStyles();
   const [active, setActive] = useState(false);
+  const [show, setShow] = useState(false);
+  const list = useSelector(state => state.optionReducer);
     
   const clickHandler = () => {
     setActive(!active);
   };
+  useEffect(() => {
+    console.log(list)
+    console.log(show)
+    if(list.list.length >= 4) {
+      setShow(true);
+    }
+  }, [list]);
 
   return (
     <React.Fragment>
@@ -280,11 +289,14 @@ const Content = () => {
                 </Box>
               </Typography>
             </Grid>
-            <Grid item className="live-view">
-              <Typography variant="h5" component="div">
-                LIVE<br /> VIEW
-              </Typography>
-            </Grid>
+              {
+                show ? (
+                <Grid item className="live-view">
+                  <Typography variant="h5" component="div">
+                    LIVE<br /> VIEW
+                  </Typography>
+                </Grid>) : null
+              }
           </Grid>
         </Grid>
         <Grid item container xs={6} direction="column" style={{ position: "relative" }}>
@@ -328,7 +340,7 @@ const Content = () => {
               <KeyboardArrowLeftIcon className="arrow-icon"/>
             </div>
           </div>
-          <img className="prod" src={prod} alt="prod" />
+          {show ? <img className="prod" src={prod} alt="prod" /> : null}
         </Grid>
       </Grid>
     </React.Fragment>

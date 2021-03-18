@@ -8,7 +8,6 @@ const initialState = {
 };
 
 export default function iconReducer(state = initialState, action) {
-  //   console.log(action)
   switch (action.type) {
     case "add_custom":
       return { ...state, arr: [action.payload, ...state.arr ] };
